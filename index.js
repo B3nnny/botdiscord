@@ -6,42 +6,42 @@ client.on('ready', () => {
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`);  
 });
 
-//PING
-client.on('message', msg => {
-  if (msg.content === 'n!ping') {
-    msg.channel.send(':ping_pong:PONG!');
+client.on('ready', () => {
+  client.user.setGame('$help pentru a vedea comenzile mele.')
+})
+
+//HELP
+client.on("message", msg => {
+  if (msg.content === '$help') {
+   msg.channel.send('**:white_check_mark: Dm send!**')
+    msg.author.send('hey salut asteas comenzile mele :wink: :$invite,$avatar,$say,$ping,$botinfo,$kick,$ban,$pool')
   }
 });
 
-//STREAMERMODE
-client.on('ready', () => {
-  client.user.setGame('Prefix n!')
-})
-
-//Bot join message
-client.on("guildCreate", guild => {
-  console.log(`Joined in: ${guild.name} , Owner: ${guild.owner.user.tag}`);
+//PING
+client.on('message', msg => {
+  if (msg.content === '$invite') {
+    msg.channel.send('invite link; https://discordapp.com/oauth2/authorize?client_id=434761925155487755&scope=bot&permissions=0');
+  }
 });
 
-//ANNOUNCE
-client.on('message', message => {
-  let args = message.content.split(" ").slice(1);
+//PING
+client.on('message', msg => {
+  if (msg.content === '$test') {
+    msg.channel.send('este bine ma ');
+  }
+});
 
-  if(message.content.startsWith("n!announce"))  {
-  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.channel.send("✰ | No Permissions!");
-         message.delete()
-         const embed = new Discord.RichEmbed()
-         .setDescription(args.join(" "))
-         .setColor(0xff0000)
-    message.channel.sendEmbed(embed);
- 
-     }
- 
+//PING
+client.on('message', msg => {
+  if (msg.content === 'Andrei') {
+    msg.channel.send('este bine ma ');
+  }
 });
 
 //AVATAR
 client.on('message', message => {
-  if (message.content === 'n!avatar') {
+  if (message.content === '$avatar') {
          message.channel.send(message.author.avatarURL);	 
  
      }
@@ -52,8 +52,8 @@ client.on('message', message => {
 client.on('message', message => {
   let args = message.content.split(" ").slice(1);
  
-  if(message.content.startsWith("n!say"))  {
-  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.channel.send("✰ | No Permissions!");	  
+  if(message.content.startsWith("$say"))  {
+  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.channel.send("âœ° | No Permissions!");	  
          message.delete()
          const embed = new Discord.RichEmbed()
          .setDescription(args.join(" "))
@@ -64,116 +64,110 @@ client.on('message', message => {
  
 });
 
+//PING
+client.on('message', msg => {
+  if (msg.content === '$ping') {
+   msg.channel.send(':ping_pong:Your ping is '+ client.ping + 'ms')
+  }
+});
+
+//BOTINFO
+client.on('message', msg => {
+  if (msg.content === '$botinfo') {
+  msg.channel.send('**Botinfo**\n\ \n\**Fire is in a few discord guilds!**\n\ \n\:tools: Bot created and scripted by ***Andrei#9391*** :black_small_square:\n\ \n\ ');
+  msg.channel.send(`**${client.users.size}** users.`);
+  msg.channel.send(`**${client.channels.size}** channels.`);
+  msg.channel.send(`**${client.guilds.size}** servers.`);
+  }
+});
+
+//KICK
+client.on('message', message => {
+  if (!message.guild) return;
+
+  if (message.content.startsWith('$kick')) {
+    const user = message.mentions.users.first();
+    if (user) {
+      const member = message.guild.member(user);
+      if (member) {
+
+        member.kick('Optional reason that will display in the audit logs').then(() => {
+          reason: 'They were bad!',
+          message.channel.send('**Successfully kicked** ${user.tag}');
+        }).catch(err => {
+          message.channel.send('**I was unable to kick the member**');
+          console.error(err);
+        });
+      } else {
+        message.channel.send('**hat user isn\'t in this guild!**');
+      }
+    } else {
+      message.channel.send('**You didn\'t mention the user to kick!**');
+    }
+  }
+});
+
+//BAN
+client.on('message', message => {
+  if (!message.guild) return;
+
+  if (message.content.startsWith('$ban')) {
+    const user = message.mentions.users.first();
+    if (user) {
+      const member = message.guild.member(user);
+      if (member) {
+        member.ban({
+          reason: 'They were bad!',
+        }).then(() => {
+          message.channel.send('**Successfully banned** ${user.tag}');
+        }).catch(err => {
+          message.channel.send('**I was unable to ban the member**');
+          console.error(err);
+        });
+      } else {
+        message.channel.send('**That user isn\'t in this guild!**');
+      }
+    } else {
+      message.channel.send('**You didn\'t mention the user to ban!**');
+    }
+  }
+});
+
+//RESTART
+client.on('message', message => {
+    if (message.author.id == '434744215608492032' , '389449007656861696') {
+    if (message.content.startsWith('$restart')) {
+            resetBot(message.channel);
+    }
+  }
+});
+
+function resetBot(channel) {
+    channel.send('**Restarting...**')
+    .then(msg => bot.destroy())
+    .then(() => bot.login(process.env.TOKEN));
+}
+
 //POOL
 client.on('message', message => {
   let args = message.content.split(" ").slice(1);
  
-  if(message.content.startsWith("n!pool"))  {
+  if(message.content.startsWith("$pool"))  {
          const embed = new Discord.RichEmbed()
          .setDescription(args.join(" "))
          .setColor(0xff0000)		 		 
     message.channel.sendEmbed(embed);
-		 message.react("👍")
-		 message.react("👎")	
+		 message.react("ðŸ‘")
+		 message.react("ðŸ‘Ž")	
  
      }
  
 });
 
-//HELP
-client.on('message', message => {
-if (message.content === 's!help') {
-    let embed = new Discord.RichEmbed()
-    .setTitle("▬▬▬▬▬▬》:wave:General Commands:wave: 《▬▬▬▬▬▬")	
-    .setColor("#43ff00")
-    .addField("✰ | n!help",  "✰ | Show a help box!")
-    .addField("✰ | n!ping",  "✰ | Show your ping!")
-    .addField("✰ | n!say",  "✰ | The bot sends the variable message used in the command!")
-    .addField("✰ | n!serverinfo",  "✰ | Show server information!")
-    .addField("✰ | n!avatar",  "✰ | Show your avatar!")
-    .addField("✰ | n!userinfo",  "✰ | It shows you information about you!")
-    .addField("✰ | n!perm",  "✰ | He shows you your permissions!")
-    .addField("✰ | n!roles",  "✰ | It shows you the roles on the server!")	
-    .addField("✰ | n!invite",  "✰ | It shows you the link from where you can get your starbot bot")	
-    .addField("✰ | n!announce",  "✰ | Write an ad on the server!")	
-    message.channel.send(embed)
-  }
+//Bot join message
+client.on("guildCreate", guild => {
+  console.log(`Joined in: ${guild.name} , Owner: ${guild.owner.user.tag}`);
 });
 
-//PERM
-client.on('message', message => {
-if (message.content === 'n!perm') {
-  message.channel.send('✰ | *\*Your permissions are:\*\*`\`\`http\n' + JSON.stringify(message.channel.permissionsFor(message.author).serialize(), null, 4)+'\n`\`\`')
-}
-});
 
-//ROLES
-client.on('message', message => {
-if (message.content === 'n!roles') {
-const embed = new Discord.RichEmbed()
-embed.addField('✰ | Roles:', '``' + message.guild.roles.map(r => r.name).join('\n') + '``')
-embed.setColor('16d9f5')
-message.channel.send({embed})
-}
-});
-
-//USERINFO
-client.on('message', message => {
-  if (message.content === 'n!userinfo') {
-    let embed = new Discord.RichEmbed()
-    .setAuthor(message.author.username)
-    .setColor("#e8b937")
-    .setDescription("This is the user's information's!")
-    .addField("Full Username", `${message.author.username}#${message.author.discriminator}`)
-    .addField("ID", message.author.id)
-    .addField("Created At ", message.author.createdAt)
-    .addField("User Avatar", message.author.avatarURL)
-    message.channel.send(embed);
- 
-     }
- 
-});
-
-//SERVERINFO
-client.on('message', message => {
-if (message.content === 'n!serverinfo') {
-    Promise.all([
-        message.react(':sunglasses:'),
-        message.react(':money_mouth:'),
-    ])
-        .catch(() => console.error('One of the emojis failed to react.'))
-    var embedserverinfo = new Discord.RichEmbed()
-    .setTitle("")
-    .setThumbnail(message.guild.iconURL)
-        .setThumbnail(message.guild.iconURL)
-        .addField("Name Server:", message.guild.name)
-        .addField("ID:", message.guild.id)
-        .addField("Verification Level:", message.guild.verificationLevel)
-        .addField("Server Owner:", message.guild.owner)	
-        .addField("Created On:", message.guild.createdAt)
-        .addField("Members:", message.guild.memberCount)
-        .addField("Channels:", message.guild.channels.size)
-        .addField("Region:", message.guild.region)
-        .setColor('#026bff')
-    message.channel.send(embedserverinfo);
-}
-})
-
-//MASSDM
-client.on('message', message => {
-if(message.content.startsWith('v.massdm')) {
-    if (message.author.id === "470521299123437568" || message.author.id === "470521299123437568"){
-        let args = message.content.split(" ").slice(1);
-        var argresult = args.join(" ")
-        const argsresult = args.join(" ")
-        let reason = args.join(" ")
-                  if(!args[1]) {
- }
- if(args[1]) {
-message.channel.guild.members.forEach(member => {{
-member.send(reason)
-message.delete()
-}})}}}
-})
-
-client.login('NDYxMjQ2NjkzMzYzNDE3MDk4.Du2ytg.1yfEsDBB3oxtNMxgLiqGufoD8nM');
+client.login('NDM0NzYxOTI1MTU1NDg3NzU1.DyyZCA.guVoTY3BbuckITxIsouwgBBUBy4');
