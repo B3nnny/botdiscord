@@ -170,4 +170,4 @@ client.on("guildCreate", guild => {
 });
 
 
-client.login('NDM0NzYxOTI1MTU1NDg3NzU1.DyyZCA.guVoTY3BbuckITxIsouwgBBUBy4');
+client.login('bot token');
